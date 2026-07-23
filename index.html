@@ -159,6 +159,72 @@
   }
   nav.primary-links a:hover::after{width:100%;}
 
+  /* ---------- Desktop Menu dropdown ---------- */
+  .nav-dropdown{
+    position:relative;
+  }
+  .nav-dropdown-toggle{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:none;
+    border:none;
+    padding:6px 0;
+    font-family:inherit;
+    font-weight:800;
+    font-size:14.5px;
+    letter-spacing:0.02em;
+    color:var(--ink);
+    position:relative;
+  }
+  .nav-dropdown-toggle::after{
+    content:'';
+    position:absolute; left:0; bottom:0;
+    height:2px; width:0%;
+    background:var(--ember);
+    transition:width .25s ease;
+  }
+  .nav-dropdown-toggle:hover::after,
+  .nav-dropdown.open .nav-dropdown-toggle::after{ width:100%; }
+  .dropdown-chevron{ transition:transform .2s ease; }
+  .nav-dropdown.open .dropdown-chevron{ transform:rotate(180deg); }
+  .nav-dropdown-menu{
+    position:absolute;
+    top:calc(100% + 14px);
+    left:50%;
+    transform:translateX(-50%) translateY(-8px);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    box-shadow:0 24px 44px -20px rgba(27,19,16,0.3);
+    padding:10px;
+    min-width:210px;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:60;
+  }
+  .nav-dropdown.open .nav-dropdown-menu{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateX(-50%) translateY(0);
+  }
+  .nav-dropdown-item{
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:14px;
+    color:var(--ink);
+    transition:background .2s ease, color .2s ease;
+  }
+  .nav-dropdown-item:hover{
+    background:var(--cream);
+    color:var(--ember-deep);
+  }
+
   .nav-actions{
     display:flex;
     align-items:center;
@@ -816,6 +882,39 @@
   .mobile-drawer nav{ display:flex; flex-direction:column; gap:4px; font-weight:800; font-size:17px; }
   .mobile-drawer nav a{ padding:12px 6px; border-bottom:1px solid var(--line); }
 
+  /* ---------- Mobile Menu accordion ---------- */
+  .mobile-nav-dropdown{ display:flex; flex-direction:column; }
+  .mobile-dropdown-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-weight:800;
+    font-size:17px;
+    color:var(--ink);
+    padding:12px 6px;
+    border-bottom:1px solid var(--line);
+  }
+  .mobile-dropdown-menu{
+    max-height:0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:max-height .3s ease;
+  }
+  .mobile-nav-dropdown.open .mobile-dropdown-menu{ max-height:400px; }
+  .mobile-dropdown-item{
+    display:block;
+    padding:10px 6px 10px 18px;
+    font-weight:700;
+    font-size:15px;
+    color:rgba(27,19,16,0.75);
+    border-bottom:1px solid var(--line);
+  }
+
   /* ---------- Responsive ---------- */
   @media (max-width: 1020px){
     .hero-grid{ grid-template-columns:1fr; }
@@ -1064,7 +1163,19 @@
       </a>
 
       <nav class="primary-links">
-        <a href="#menu">Menu</a>
+        <div class="nav-dropdown" id="menuDropdown">
+          <button class="nav-dropdown-toggle" id="menuDropdownToggle" type="button" aria-haspopup="true" aria-expanded="false">
+            Menu
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="nav-dropdown-menu" id="menuDropdownMenu">
+            <a href="#menu" class="nav-dropdown-item">Rice</a>
+            <a href="#menu" class="nav-dropdown-item">Chicken</a>
+            <a href="#menu" class="nav-dropdown-item">Stir Fry Spaghetti</a>
+            <a href="#menu" class="nav-dropdown-item">Chicken &amp; Chips</a>
+            <a href="#menu" class="nav-dropdown-item">Chicken Sandwich</a>
+          </div>
+        </div>
         <a href="#about">Our Story</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -1086,7 +1197,19 @@
   <div class="mobile-drawer" id="mobileDrawer">
     <button class="icon-btn" id="mobileClose" aria-label="Close menu" style="align-self:flex-end;">✕</button>
     <nav>
-      <a href="#menu">Menu</a>
+      <div class="mobile-nav-dropdown">
+        <button class="mobile-dropdown-toggle" id="mobileMenuToggleBtn" type="button" aria-expanded="false">
+          Menu
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="mobile-dropdown-menu" id="mobileMenuSubmenu">
+          <a href="#menu" class="mobile-dropdown-item">Rice</a>
+          <a href="#menu" class="mobile-dropdown-item">Chicken</a>
+          <a href="#menu" class="mobile-dropdown-item">Stir Fry Spaghetti</a>
+          <a href="#menu" class="mobile-dropdown-item">Chicken &amp; Chips</a>
+          <a href="#menu" class="mobile-dropdown-item">Chicken Sandwich</a>
+        </div>
+      </div>
       <a href="#about">Our Story</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -1094,7 +1217,6 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" placeholder="Search the menu…" aria-label="Search the menu">
     </div>
-    <button class="btn btn-primary">Sign In / Join</button>
   </div>
 
   <main id="top">
@@ -1558,12 +1680,12 @@
           <p class="section-desc">Add the neighborhoods or zones you deliver to here.</p>
         </div>
         <div class="area-chips">
-          <span class="area-chip">Add area</span>
-          <span class="area-chip">Add area</span>
-          <span class="area-chip">Add area</span>
-          <span class="area-chip">Add area</span>
-          <span class="area-chip">Add area</span>
-          <span class="area-chip">Add area</span>
+          <span class="area-chip">UNILORIN</span>
+          <span class="area-chip">UNILORIN</span>
+          <span class="area-chip">UNILORIN</span>
+          <span class="area-chip">UNILORIN</span>
+          <span class="area-chip">UNILORIN</span>
+          <span class="area-chip">UNILORIN</span>
         </div>
       </div>
     </section>
@@ -1717,6 +1839,47 @@
 
   menuToggle.addEventListener('click', () => mobileDrawer.classList.add('open'));
   mobileClose.addEventListener('click', () => mobileDrawer.classList.remove('open'));
+
+  // Close the mobile drawer whenever any navigation item inside it is clicked,
+  // then let the browser follow the link to the selected section.
+  mobileDrawer.querySelectorAll('nav a').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      mobileDrawer.classList.remove('open');
+    });
+  });
+
+  // Desktop Menu dropdown
+  const menuDropdown = document.getElementById('menuDropdown');
+  const menuDropdownToggle = document.getElementById('menuDropdownToggle');
+  if(menuDropdown && menuDropdownToggle){
+    menuDropdownToggle.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const isOpen = menuDropdown.classList.toggle('open');
+      menuDropdownToggle.setAttribute('aria-expanded', isOpen);
+    });
+    menuDropdown.querySelectorAll('.nav-dropdown-item').forEach(item=>{
+      item.addEventListener('click', ()=>{
+        menuDropdown.classList.remove('open');
+        menuDropdownToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.addEventListener('click', (e)=>{
+      if(!menuDropdown.contains(e.target)){
+        menuDropdown.classList.remove('open');
+        menuDropdownToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // Mobile Menu accordion
+  const mobileMenuToggleBtn = document.getElementById('mobileMenuToggleBtn');
+  const mobileMenuDropdown = mobileMenuToggleBtn ? mobileMenuToggleBtn.closest('.mobile-nav-dropdown') : null;
+  if(mobileMenuToggleBtn && mobileMenuDropdown){
+    mobileMenuToggleBtn.addEventListener('click', ()=>{
+      const isOpen = mobileMenuDropdown.classList.toggle('open');
+      mobileMenuToggleBtn.setAttribute('aria-expanded', isOpen);
+    });
+  }
 
   // Order tabs
   document.querySelectorAll('.order-tab').forEach(tab=>{
